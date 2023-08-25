@@ -1,0 +1,45 @@
+#define BUFFER 128
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct sp{ 
+   int descripteur;
+   unsigned char buf[BUFFER];
+   int pos;
+} FICHIER;
+
+FICHIER* my_open(const char *filename, const char mode)
+{
+   FICHIER* file_out;
+   file_out = (FICHIER *)malloc(sizeof(struct sp));
+   if ( mode == 'r' )
+   {
+       file_out->descripteur=open(filename, O_RDONLY);
+       if ( file_out->descripteur == -1) return NULL;
+       else return file_out;
+   }
+   else if ( mode == 'w' ) 
+   {
+       file_out->descripteur=open(filename, O_WRONLY | O_CREAT | O_TRUNC);
+       if ( file_out->descripteur == -1 ) return NULL;
+       else return file_out;
+   }
+   else return NULL;
+}
+
+/*int my_getc(FICHIER* filename)
+{
+   unsigned char c;
+   ssize_t 
+*/
+
+int main()
+{
+   FICHIER* f=my_open("titi",'r');
+   FICHIER* f2=my_open("toto",'w');
+   free(f);
+   free(f2);
+   return 0;
+}
